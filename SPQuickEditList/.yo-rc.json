@@ -1,0 +1,13 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "whichFolder": "subdir",
+    "version": "1.8.1",
+    "libraryName": "sp-quick-edit-list",
+    "libraryId": "d662cb0a-fe78-48c6-a6d4-6c1408455513",
+    "packageManager": "npm",
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

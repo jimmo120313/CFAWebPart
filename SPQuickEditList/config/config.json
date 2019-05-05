@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "sp-quick-edit-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/spQuickEditList/SpQuickEditListWebPart.js",
+          "manifest": "./src/webparts/spQuickEditList/SpQuickEditListWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SpQuickEditListWebPartStrings": "lib/webparts/spQuickEditList/loc/{locale}.js"
+  }
+}
