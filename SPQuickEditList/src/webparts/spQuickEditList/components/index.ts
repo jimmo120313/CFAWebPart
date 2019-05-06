@@ -1,1 +1,1 @@
-export * from "./SpQuickEditList/index";
+export * from "./spQuickEditList/index";
