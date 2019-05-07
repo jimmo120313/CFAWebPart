@@ -8,19 +8,19 @@ import {
 } from "@microsoft/sp-property-pane";
 
 import * as strings from "SpQuickEditListWebPartStrings";
-import { SpQuickEditList, ISpQuickEditListProps } from "./components";
+import { AppContainer, IAppContainerProps } from "./components";
 export interface ISpQuickEditListWebPartProps {
   description: string;
 }
 
 export default class SpQuickEditListWebPart extends BaseClientSideWebPart<
-  ISpQuickEditListWebPartProps
+  IAppContainerProps
 > {
   public render(): void {
     if (!this.renderedOnce) {
       const element: React.ReactElement<
-        ISpQuickEditListProps
-      > = React.createElement(SpQuickEditList, {
+        IAppContainerProps
+      > = React.createElement(AppContainer, {
         description: this.properties.description
       });
 

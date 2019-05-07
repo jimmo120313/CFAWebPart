@@ -2,6 +2,19 @@ import * as React from "react";
 import styles from "./SpQuickEditList.module.scss";
 import { ISpQuickEditListProps } from "./ISpQuickEditListProps";
 import { escape } from "@microsoft/sp-lodash-subset";
+import ReactDataGrid from "react-data-grid";
+
+const columns = [
+  { key: "id", name: "ID" },
+  { key: "title", name: "Title" },
+  { key: "count", name: "Count" }
+];
+
+const rows = [
+  { id: 0, title: "row1", count: 20 },
+  { id: 1, title: "row1", count: 40 },
+  { id: 2, title: "row1", count: 60 }
+];
 
 export class SpQuickEditList extends React.Component<
   ISpQuickEditListProps,
@@ -9,24 +22,12 @@ export class SpQuickEditList extends React.Component<
 > {
   public render(): React.ReactElement<ISpQuickEditListProps> {
     return (
-      <div className={styles.spQuickEditList}>
-        <div className={styles.container}>
-          <div className={styles.row}>
-            <div className={styles.column}>
-              <span className={styles.title}>Welcome to SharePoint!</span>
-              <p className={styles.subTitle}>
-                Customize SharePoint experiences using Web Parts.
-              </p>
-              <p className={styles.description}>
-                {escape(this.props.description)}
-              </p>
-              <a href="https://aka.ms/spfx" className={styles.button}>
-                <span className={styles.label}>Learn more</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ReactDataGrid
+        columns={columns}
+        rowGetter={i => rows[i]}
+        rowsCount={3}
+        minHeight={150}
+      />
     );
   }
 }
