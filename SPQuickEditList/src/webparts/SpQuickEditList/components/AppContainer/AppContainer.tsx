@@ -1,7 +1,7 @@
 import * as React from "react";
 import { IAppContainerProps } from "./IAppContainerProps";
 import styles from "./AppContainer.module.scss";
-import { SpQuickEditList } from "./../SpQuickEditList/SpQuickEditList";
+import { SpQuickEditList } from "../SpQuickEditList/SpQuickEditList";
 
 export class AppContainer extends React.Component<IAppContainerProps, {}> {
   public render(): React.ReactElement<IAppContainerProps> {

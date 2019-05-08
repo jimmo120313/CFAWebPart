@@ -9,6 +9,9 @@ import {
 
 import * as strings from "SpQuickEditListWebPartStrings";
 import { AppContainer, IAppContainerProps } from "./components";
+import { IBrigade } from "../../models";
+import { sp } from "@pnp/sp";
+
 export interface ISpQuickEditListWebPartProps {
   description: string;
 }
@@ -16,6 +19,16 @@ export interface ISpQuickEditListWebPartProps {
 export default class SpQuickEditListWebPart extends BaseClientSideWebPart<
   IAppContainerProps
 > {
+  public componentDidMount(): void {
+    console.log("test");
+    sp.web.lists
+      .getByTitle("Brigade")
+      .items.get()
+      .then((items: IBrigade[]) => {
+        console.log(items);
+      });
+  }
+
   public render(): void {
     if (!this.renderedOnce) {
       const element: React.ReactElement<
@@ -56,5 +69,14 @@ export default class SpQuickEditListWebPart extends BaseClientSideWebPart<
         }
       ]
     };
+  }
+
+  public static _getBrigadeDetail(): void {
+    sp.web.lists
+      .getByTitle("Brigade")
+      .items.get()
+      .then((items: IBrigade[]) => {
+        console.log(items);
+      });
   }
 }
