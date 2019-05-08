@@ -11,7 +11,7 @@ export class AppContainer extends React.Component<IAppContainerProps, {}> {
           <div className={styles.row}>
             <div className={styles.column}>
               <span className={styles.title}>Welcome to SharePoint!</span>
-              <SpQuickEditList description="test" />
+              <SpQuickEditList description={"test"} />
             </div>
           </div>
         </div>

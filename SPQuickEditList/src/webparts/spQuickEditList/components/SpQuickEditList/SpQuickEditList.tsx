@@ -3,6 +3,9 @@ import styles from "./SpQuickEditList.module.scss";
 import { ISpQuickEditListProps } from "./ISpQuickEditListProps";
 import { escape } from "@microsoft/sp-lodash-subset";
 import ReactDataGrid from "react-data-grid";
+import { IABR } from "../../../../models";
+import { ABRService } from "../../../../services";
+import { SPHttpClient } from "@microsoft/sp-http";
 
 const columns = [
   { key: "id", name: "ID" },
@@ -20,6 +23,16 @@ export class SpQuickEditList extends React.Component<
   ISpQuickEditListProps,
   {}
 > {
+  private abrService: ABRService;
+
+  // protected onInit(): Promise<void> {
+  //   this.abrService = new ABRService(
+  //     this.context.pageContext.web.absoluteUrl,
+  //     this.context.SPHttpClient
+  //   );
+  //   return Promise.resolve();
+  // }
+
   public render(): React.ReactElement<ISpQuickEditListProps> {
     return (
       <ReactDataGrid
@@ -30,4 +43,19 @@ export class SpQuickEditList extends React.Component<
       />
     );
   }
+  public componentDidMount(): void {
+    this.abrService = new ABRService(
+      this.context.pageContext.web.absoluteUrl,
+      this.context.SPHttpClient
+    );
+    this.abrService.getABRS();
+  }
+  // private _getABR(): void {
+  //   this.abrService.getABRS()
+  //   .then((abrs:IABR[]) =>{
+  //     this._renderABR(this.)
+  //   }
+
+  //   );
+  // }
 }
