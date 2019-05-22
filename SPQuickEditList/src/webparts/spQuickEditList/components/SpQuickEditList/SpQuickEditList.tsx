@@ -23,14 +23,6 @@ export class SpQuickEditList extends React.Component<
 > {
   private abrService: ABRService;
 
-  // protected onInit(): Promise<void> {
-  //   this.abrService = new ABRService(
-  //     this.context.pageContext.web.absoluteUrl,
-  //     this.context.SPHttpClient
-  //   );
-  //   return Promise.resolve();
-  // }
-
   public render(): React.ReactElement<ISpQuickEditListProps> {
     return (
       <ReactDataGrid

@@ -1,3 +1,3 @@
 export interface IAppContainerProps {
-  description: string;
+  description?: string;
 }
