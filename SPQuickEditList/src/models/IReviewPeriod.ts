@@ -1,4 +1,4 @@
 export interface IReviewPeriod {
-  id: string;
-  ReviewReriod: string;
+  key: string;
+  text: string;
 }
