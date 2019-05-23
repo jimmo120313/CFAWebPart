@@ -1,6 +1,6 @@
 import { IABR } from "../models";
 import { sp } from "@pnp/sp";
-import { IBrigade, IReviewPeriod, IDistrict } from "../models/index";
+import { IBrigade, IReviewPeriod, IDistrict, IDropdownOption } from "../models/index";
 
 const LIST_API_ENDPOINT: string = `/_api/web/lists/getbytitle('Brigade')`;
 const SELECT_QUERY: string = `$select=Id,Title`;
@@ -14,10 +14,10 @@ export class ABRService {
         console.log(items);
       });
   }
-  private reviewPeriod: IReviewPeriod[] = [];
-  private district: IDistrict[] = [];
+  private reviewPeriod: IDropdownOption[] = [];
+  private district: IDropdownOption[] = [];
 
-  public async _getReviewPeriod(): Promise<IReviewPeriod[]> {
+  public async _getReviewPeriodOption(): Promise<IDropdownOption[]> {
     sp.web.lists
       .getByTitle("Statements")
       .fields.getByInternalNameOrTitle("Review Period")
@@ -26,7 +26,7 @@ export class ABRService {
       .then(f => {
         console.log(f.Choices);
         f.Choices.forEach(e => {
-          let reviewPeriodObj: IReviewPeriod = {
+          let reviewPeriodObj: IDropdownOption = {
             key: e,
             text: e
           };
@@ -36,14 +36,22 @@ export class ABRService {
     return this.reviewPeriod;
   }
 
-  public async _getDistrict(): Promise<void> {
+  public async _getDistrictOption(): Promise<IDropdownOption[]> {
     sp.web.lists
       .getByTitle("District")
-      .items.select("Title", "Lookup/Region")
-      .expand("Lookup/Region")
+      // .items.select("Title", "Region/Title")
+      // .expand("Region")
+      .items.select("Title")
       .get()
       .then((items: any[]) => {
-        console.log(items);
+        items.forEach(d => {
+          let districtObj: IDropdownOption = {
+            key: d.etag,
+            text: d.Title
+          };
+          this.district.push(districtObj);
+        });
       });
+    return this.district;
   }
 }

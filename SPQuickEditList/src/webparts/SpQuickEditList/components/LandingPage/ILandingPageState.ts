@@ -1,6 +1,6 @@
-import { IReviewPeriod, IDistrict } from "../../../../models/index";
+import { IReviewPeriod, IDropdownOption } from "../../../../models/index";
 
 export interface ILandingPageState {
-  reviewPeriod: IReviewPeriod[];
-  district: IDistrict[];
+  reviewPeriod: IDropdownOption[];
+  district: IDropdownOption[];
 }
