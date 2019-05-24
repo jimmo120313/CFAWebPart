@@ -1,32 +1,48 @@
-import { IABR } from "../models";
 import { sp } from "@pnp/sp";
-import { IBrigade, IReviewPeriod, IDistrict, IDropdownOption } from "../models/index";
-
-const LIST_API_ENDPOINT: string = `/_api/web/lists/getbytitle('Brigade')`;
-const SELECT_QUERY: string = `$select=Id,Title`;
+import {
+  IBrigade,
+  IReviewPeriod,
+  IDistrict,
+  ISolutionDropdownOption,
+  ISolutionDataListOption
+} from "../models/index";
 
 export class ABRService {
-  public async _getBrigadeDetail(): Promise<void> {
-    sp.web.lists
-      .getByTitle("Brigade")
-      .items.get()
-      .then((items: IBrigade[]) => {
-        console.log(items);
-      });
-  }
-  private reviewPeriod: IDropdownOption[] = [];
-  private district: IDropdownOption[] = [];
+  private reviewPeriod: ISolutionDropdownOption[] = [];
+  private district: ISolutionDropdownOption[] = [];
 
-  public async _getReviewPeriodOption(): Promise<IDropdownOption[]> {
+  public async _getBrigadeOption(
+    district: string
+  ): Promise<ISolutionDataListOption[]> {
+    let q: string = "District/Title eq '" + district + "'";
+    let brigade: ISolutionDataListOption[] = [];
+    const allBrigade = await sp.web.lists
+      .getByTitle("Brigade")
+      .items.select("Title", "District/Title")
+      .expand("District")
+      .filter(q)
+      .getAll();
+
+    for (let i = 0; i < allBrigade.length; i++) {
+      brigade.push({
+        key: i,
+        name: allBrigade[i].Title,
+        value: i
+      });
+    }
+    return brigade;
+  }
+
+  public async _getReviewPeriodOption(): Promise<ISolutionDropdownOption[]> {
     sp.web.lists
       .getByTitle("Statements")
       .fields.getByInternalNameOrTitle("Review Period")
       .get()
       // .items.select("Review_x0020_Period").expand("").get()
       .then(f => {
-        console.log(f.Choices);
+        //console.log(f.Choices);
         f.Choices.forEach(e => {
-          let reviewPeriodObj: IDropdownOption = {
+          let reviewPeriodObj: ISolutionDropdownOption = {
             key: e,
             text: e
           };
@@ -36,16 +52,14 @@ export class ABRService {
     return this.reviewPeriod;
   }
 
-  public async _getDistrictOption(): Promise<IDropdownOption[]> {
+  public async _getDistrictOption(): Promise<ISolutionDropdownOption[]> {
     sp.web.lists
       .getByTitle("District")
-      // .items.select("Title", "Region/Title")
-      // .expand("Region")
       .items.select("Title")
       .get()
       .then((items: any[]) => {
         items.forEach(d => {
-          let districtObj: IDropdownOption = {
+          let districtObj: ISolutionDropdownOption = {
             key: d.etag,
             text: d.Title
           };

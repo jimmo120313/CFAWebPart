@@ -1,6 +1,14 @@
-import { IReviewPeriod, IDropdownOption } from "../../../../models/index";
+import {
+  ISolutionDropdownOption,
+  ISolutionDataListOption
+} from "../../../../models/index";
 
 export interface ILandingPageState {
-  reviewPeriod: IDropdownOption[];
-  district: IDropdownOption[];
+  reviewPeriodOption: ISolutionDropdownOption[];
+  districtOption: ISolutionDropdownOption[];
+  selectedBrigade: ISolutionDataListOption[];
+  brigadeOption: ISolutionDataListOption[];
+  isGetBrigadeDisabled: boolean;
+  selectedDistrict: string;
+  selectedReviewPeriod: string;
 }

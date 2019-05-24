@@ -11,7 +11,7 @@ export class AppContainer extends React.Component<IAppContainerProps, {}> {
     return (
       <div>
         <LandingPage />
-        <SpQuickEditList />
+        {/* <SpQuickEditList /> */}
       </div>
     );
   }

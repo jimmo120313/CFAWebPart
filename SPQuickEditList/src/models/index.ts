@@ -2,4 +2,5 @@ export * from "./IABR";
 export * from "./IBrigade";
 export * from "./IReviewPeriod";
 export * from "./IDistrict";
-export * from "./IDropdownOption";
+export * from "./ISolutionDropdownOption";
+export * from "./ISolutionDataListOption";
