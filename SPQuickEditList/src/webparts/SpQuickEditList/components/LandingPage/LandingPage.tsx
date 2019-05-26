@@ -4,7 +4,7 @@ import {
   IBrigade,
   IReviewPeriod,
   ISolutionDropdownOption,
-  ISolutionDataListOption
+  IBrigadeDataListOption
 } from "../../../../models/index";
 import styles from "./LandingPage.module.scss";
 import { ABRService } from "../../../../services/ABRService";
@@ -25,8 +25,10 @@ import {
 export class LandingPage extends React.Component<
   ILandingPageProps,
   ILandingPageState
-> {
-  public brigade = new ABRService();
+  > {
+  private brigade = new ABRService();
+  private _selection: Selection;
+  private _allBrigadeOption: IBrigadeDataListOption[];
 
   constructor(props: ILandingPageProps) {
     super(props);
@@ -41,7 +43,13 @@ export class LandingPage extends React.Component<
 
       isGetBrigadeDisabled: false
     };
+
+    this._selection = new Selection({
+      onSelectionChanged: () => this.setState({ selectedBrigade: this._getSelectionDetails() })
+    });
   }
+
+
 
   public async componentDidMount(): Promise<void> {
     //this.brigade._getBrigadeDetail();
@@ -57,27 +65,47 @@ export class LandingPage extends React.Component<
       });
   }
 
+
+  private _getSelectionDetails(): IBrigadeDataListOption[] {
+    const selectionCount: IBrigadeDataListOption[] = [];
+
+    for (let i = 0; i < this._selection.getSelectedCount(); i++) {
+      // let selected = {
+      //   key: i + 1,
+      //   brigadeName: (this._selection.getSelection()[i] as IBrigadeDataListOption).brigadeName
+      // }
+      // selectionCount.push(selected)
+      selectionCount.push(this._selection.getSelection()[i] as IBrigadeDataListOption)
+    }
+
+    return selectionCount;
+  }
   public _onGetBrigade = async (): Promise<void> => {
-    let brigade2 = new ABRService();
-    brigade2
+    let brigadeOption = new ABRService();
+    brigadeOption
       ._getBrigadeOption(this.state.selectedDistrict)
-      .then((option2: ISolutionDataListOption[]) => {
-        console.log("test1");
-        console.log(option2);
-        console.log("test1.1");
-        this.setState({ brigadeOption: option2 });
+      .then((brigadeOption: IBrigadeDataListOption[]) => {
+        this._allBrigadeOption = brigadeOption;
+        this.setState({ brigadeOption: this._allBrigadeOption });
       })
       .catch(e => {
         console.log(e);
       });
   };
 
-  private _selection = new Selection({
-    // onSelectionChanged: () => this.setState({ selectionDetails: "" })
-  });
+  private _onChanged = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
+    //private _onChanged = (Text: any): void => {
+
+    this.setState({
+      brigadeOption: text ? this._allBrigadeOption.filter(i => i.brigadeName.toLowerCase().indexOf(text) > -1) : this._allBrigadeOption
+    });
+  };
+
+
 
   private _onDistrictSelected = (item: IDropdownOption): void => {
-    this.setState({ selectedDistrict: item.text });
+    this.setState({ selectedDistrict: item.text, brigadeOption: [], selectedBrigade: [] });
+    this._allBrigadeOption = [];
   };
   private _onReviewPeriodSelected = (item: IDropdownOption): void => {
     this.setState({ selectedReviewPeriod: item.text });
@@ -110,36 +138,31 @@ export class LandingPage extends React.Component<
 
         <TextField
           //className={exampleChildClass}
-          label="Filter by name:"
-          //onChange={this._onFilter}
+          label='Filter by name:'
+          onChange={this._onChanged}
         />
-        {/* <MarqueeSelection selection={this._selection}> */}
-        <DetailsList
-          items={[
-            {
-              key: 111,
-              name: "Brigade",
-              value: 111
-            }
-          ]}
-          columns={[
-            {
-              key: "Brigade",
-              name: "Brigade",
-              fieldName: "",
-              minWidth: 100,
-              isResizable: true
-            }
-          ]}
-          setKey="set"
-          layoutMode={DetailsListLayoutMode.fixedColumns}
-          selection={this._selection}
-          selectionPreservedOnEmptyClick={true}
-          ariaLabelForSelectionColumn="Toggle selection"
-          ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          //onItemInvoked={this._onItemInvoked}
-        />
-        {/* </MarqueeSelection> */}
+        <MarqueeSelection selection={this._selection}>
+          <DetailsList
+            items={this.state.brigadeOption}
+            columns={[
+              {
+                key: "Brigade",
+                name: "Brigade",
+                fieldName: "brigadeName",
+                minWidth: 100,
+                maxWidth: 200,
+                isResizable: true
+              }
+            ]}
+            setKey="set"
+            layoutMode={DetailsListLayoutMode.fixedColumns}
+            selection={this._selection}
+            selectionPreservedOnEmptyClick={true}
+            ariaLabelForSelectionColumn="Toggle selection"
+            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+          //onItemInvoked={this._onItemInvoked}    //This is for action Double click
+          />
+        </MarqueeSelection>
       </div>
     );
   }

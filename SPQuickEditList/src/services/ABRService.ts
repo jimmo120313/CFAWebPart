@@ -4,7 +4,7 @@ import {
   IReviewPeriod,
   IDistrict,
   ISolutionDropdownOption,
-  ISolutionDataListOption
+  IBrigadeDataListOption
 } from "../models/index";
 
 export class ABRService {
@@ -13,9 +13,9 @@ export class ABRService {
 
   public async _getBrigadeOption(
     district: string
-  ): Promise<ISolutionDataListOption[]> {
+  ): Promise<IBrigadeDataListOption[]> {
     let q: string = "District/Title eq '" + district + "'";
-    let brigade: ISolutionDataListOption[] = [];
+    let brigade: IBrigadeDataListOption[] = [];
     const allBrigade = await sp.web.lists
       .getByTitle("Brigade")
       .items.select("Title", "District/Title")
@@ -26,8 +26,7 @@ export class ABRService {
     for (let i = 0; i < allBrigade.length; i++) {
       brigade.push({
         key: i,
-        name: allBrigade[i].Title,
-        value: i
+        brigadeName: allBrigade[i].Title,
       });
     }
     return brigade;
