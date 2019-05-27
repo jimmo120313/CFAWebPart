@@ -23,9 +23,7 @@ export default class SpQuickEditListWebPart extends BaseClientSideWebPart<
     if (!this.renderedOnce) {
       const element: React.ReactElement<
         IAppContainerProps
-      > = React.createElement(AppContainer, {
-        description: this.properties.description
-      });
+      > = React.createElement(AppContainer);
 
       ReactDom.render(element, this.domElement);
     }

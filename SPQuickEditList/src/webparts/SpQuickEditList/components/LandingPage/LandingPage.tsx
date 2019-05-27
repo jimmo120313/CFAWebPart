@@ -15,7 +15,8 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 
 import {
   CommandBarButton,
-  IButtonProps
+  IButtonProps,
+  PrimaryButton
 } from "office-ui-fabric-react/lib/Button";
 import {
   DetailsList,
@@ -41,7 +42,8 @@ export class LandingPage extends React.Component<
       selectedDistrict: "",
       selectedReviewPeriod: "",
 
-      isGetBrigadeDisabled: false
+      isGetBrigadeDisabled: false,
+      isCreateActionPlanButtonDisabled: false
     };
 
     this._selection = new Selection({
@@ -113,6 +115,13 @@ export class LandingPage extends React.Component<
     this.setState({ selectedReviewPeriod: item.text });
   };
 
+  private _createActionPlan = (): void => {
+    this.props.onCreateActionPlan(
+      this.state.selectedBrigade,
+      this.state.selectedReviewPeriod
+    );
+  };
+
   public render(): React.ReactElement<ILandingPageProps> {
     return (
       <div>
@@ -166,6 +175,12 @@ export class LandingPage extends React.Component<
             //onItemInvoked={this._onItemInvoked}    //This is for action Double click
           />
         </MarqueeSelection>
+        <PrimaryButton
+          disabled={this.state.isCreateActionPlanButtonDisabled}
+          //checked={false}
+          text="I Want to Build an Action Plan"
+          onClick={this._createActionPlan}
+        />
       </div>
     );
   }

@@ -8,7 +8,8 @@ export interface ILandingPageState {
   districtOption: ISolutionDropdownOption[];
   selectedBrigade: IBrigadeDataListOption[];
   brigadeOption: IBrigadeDataListOption[];
-  isGetBrigadeDisabled: boolean;
   selectedDistrict: string;
   selectedReviewPeriod: string;
+  isGetBrigadeDisabled: boolean;
+  isCreateActionPlanButtonDisabled: boolean;
 }
