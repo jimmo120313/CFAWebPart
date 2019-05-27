@@ -6,7 +6,7 @@ import {
   ISolutionDropdownOption,
   IBrigadeDataListOption
 } from "../../../../models/index";
-import styles from "./LandingPage.module.scss";
+require("./LandingPage.module.scss");
 import { ABRService } from "../../../../services/ABRService";
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { Selection } from "office-ui-fabric-react/lib/Selection";
@@ -25,7 +25,7 @@ import {
 export class LandingPage extends React.Component<
   ILandingPageProps,
   ILandingPageState
-  > {
+> {
   private brigade = new ABRService();
   private _selection: Selection;
   private _allBrigadeOption: IBrigadeDataListOption[];
@@ -45,11 +45,10 @@ export class LandingPage extends React.Component<
     };
 
     this._selection = new Selection({
-      onSelectionChanged: () => this.setState({ selectedBrigade: this._getSelectionDetails() })
+      onSelectionChanged: () =>
+        this.setState({ selectedBrigade: this._getSelectionDetails() })
     });
   }
-
-
 
   public async componentDidMount(): Promise<void> {
     //this.brigade._getBrigadeDetail();
@@ -65,24 +64,20 @@ export class LandingPage extends React.Component<
       });
   }
 
-
   private _getSelectionDetails(): IBrigadeDataListOption[] {
     const selectionCount: IBrigadeDataListOption[] = [];
 
     for (let i = 0; i < this._selection.getSelectedCount(); i++) {
-      // let selected = {
-      //   key: i + 1,
-      //   brigadeName: (this._selection.getSelection()[i] as IBrigadeDataListOption).brigadeName
-      // }
-      // selectionCount.push(selected)
-      selectionCount.push(this._selection.getSelection()[i] as IBrigadeDataListOption)
+      selectionCount.push(this._selection.getSelection()[
+        i
+      ] as IBrigadeDataListOption);
     }
 
     return selectionCount;
   }
   public _onGetBrigade = async (): Promise<void> => {
-    let brigadeOption = new ABRService();
-    brigadeOption
+    let bOption = new ABRService();
+    bOption
       ._getBrigadeOption(this.state.selectedDistrict)
       .then((brigadeOption: IBrigadeDataListOption[]) => {
         this._allBrigadeOption = brigadeOption;
@@ -93,18 +88,25 @@ export class LandingPage extends React.Component<
       });
   };
 
-  private _onChanged = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
-    //private _onChanged = (Text: any): void => {
-
+  // private _onChanged = (
+  //   event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ): void => {
+  private _onChanged = (text: any): void => {
     this.setState({
-      brigadeOption: text ? this._allBrigadeOption.filter(i => i.brigadeName.toLowerCase().indexOf(text) > -1) : this._allBrigadeOption
+      brigadeOption: text
+        ? this._allBrigadeOption.filter(
+            i => i.brigadeName.toLowerCase().indexOf(text) > -1
+          )
+        : this._allBrigadeOption
     });
   };
 
-
-
   private _onDistrictSelected = (item: IDropdownOption): void => {
-    this.setState({ selectedDistrict: item.text, brigadeOption: [], selectedBrigade: [] });
+    this.setState({
+      selectedDistrict: item.text,
+      brigadeOption: [],
+      selectedBrigade: []
+    });
     this._allBrigadeOption = [];
   };
   private _onReviewPeriodSelected = (item: IDropdownOption): void => {
@@ -130,7 +132,7 @@ export class LandingPage extends React.Component<
             data-automation-id="test2"
             disabled={this.state.isGetBrigadeDisabled}
             //checked={checked}
-            iconProps={{ iconName: "Mail" }}
+            iconProps={{ iconName: "CheckList" }}
             text="Select Brigade"
             onClick={this._onGetBrigade}
           />
@@ -138,8 +140,8 @@ export class LandingPage extends React.Component<
 
         <TextField
           //className={exampleChildClass}
-          label='Filter by name:'
-          onChange={this._onChanged}
+          label="Filter by name:"
+          onChanged={this._onChanged}
         />
         <MarqueeSelection selection={this._selection}>
           <DetailsList
@@ -151,6 +153,7 @@ export class LandingPage extends React.Component<
                 fieldName: "brigadeName",
                 minWidth: 100,
                 maxWidth: 200,
+                headerClassName: "detailListHeader",
                 isResizable: true
               }
             ]}
@@ -160,7 +163,7 @@ export class LandingPage extends React.Component<
             selectionPreservedOnEmptyClick={true}
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          //onItemInvoked={this._onItemInvoked}    //This is for action Double click
+            //onItemInvoked={this._onItemInvoked}    //This is for action Double click
           />
         </MarqueeSelection>
       </div>
