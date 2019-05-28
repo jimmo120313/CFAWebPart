@@ -26,7 +26,7 @@ export class ABRService {
     for (let i = 0; i < allBrigade.length; i++) {
       brigade.push({
         key: i,
-        brigadeName: allBrigade[i].Title,
+        brigadeName: allBrigade[i].Title
       });
     }
     return brigade;
