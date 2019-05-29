@@ -1,7 +1,8 @@
 import * as React from "react";
 import { IActionPlanPageProps, IActionPlanPageState } from "./index";
+import { ActionPlanList } from "../ActionPlanList/index";
+import { ABRList } from "../ABRList/index";
 import {
-  IBrigade,
   IReviewPeriod,
   ISolutionDropdownOption,
   IBrigadeDataListOption
@@ -15,13 +16,11 @@ export class ActionPlanPage extends React.Component<
   IActionPlanPageState
 > {
   private brigade = new ABRService();
-  /**
-   *
-   */
+
   constructor(props: IActionPlanPageProps) {
     super(props);
     this.state = {
-      brigadeOption: this.props.selectedBrigade,
+      brigadeOption: [],
       ratingOption: [],
       ViabilityOption: [],
       EndState: [],
@@ -30,29 +29,29 @@ export class ActionPlanPage extends React.Component<
   }
   public async componentDidMount(): Promise<void> {
     //Get Rating
-    this.brigade
-      ._getReviewPeriodOption()
-      .then((option: ISolutionDropdownOption[]) => {
-        this.setState({ reviewPeriodOption: option });
-      });
+    // this.brigade
+    //   ._getReviewPeriodOption()
+    //   .then((option: ISolutionDropdownOption[]) => {
+    //     this.setState({ reviewPeriodOption: option });
+    //   });
     //Get Viability Category
-    this.brigade
-      ._getDistrictOption()
-      .then((option: ISolutionDropdownOption[]) => {
-        this.setState({ districtOption: option });
-      });
-    //Get End State
-    this.brigade
-      ._getDistrictOption()
-      .then((option: ISolutionDropdownOption[]) => {
-        this.setState({ districtOption: option });
-      });
-    //Get Classification
-    this.brigade
-      ._getDistrictOption()
-      .then((option: ISolutionDropdownOption[]) => {
-        this.setState({ districtOption: option });
-      });
+    // this.brigade
+    //   ._getDistrictOption()
+    //   .then((option: ISolutionDropdownOption[]) => {
+    //     this.setState({ districtOption: option });
+    //   });
+    // //Get End State
+    // this.brigade
+    //   ._getDistrictOption()
+    //   .then((option: ISolutionDropdownOption[]) => {
+    //     this.setState({ districtOption: option });
+    //   });
+    // //Get Classification
+    // this.brigade
+    //   ._getDistrictOption()
+    //   .then((option: ISolutionDropdownOption[]) => {
+    //     this.setState({ districtOption: option });
+    //   });
   }
 
   public render(): React.ReactElement<IActionPlanPageProps> {
@@ -60,9 +59,10 @@ export class ActionPlanPage extends React.Component<
       <div>
         <Dropdown
           placeHolder="Brigade (Multi Select)"
-          options={this.state.reviewPeriodOption}
-          onChanged={this._onReviewPeriodSelected}
+          options={this.state.brigadeOption}
+          //onChanged={this._onReviewPeriodSelected}
         />
+        {/*
         <Dropdown
           placeHolder="Rating (Multi Select)"
           options={this.state.districtOption}
@@ -82,7 +82,9 @@ export class ActionPlanPage extends React.Component<
           placeHolder="Classification"
           options={this.state.districtOption}
           onChanged={this._onDistrictSelected}
-        />
+        /> */}
+        <ABRList />
+        {/* <ActionPlanList /> */}
       </div>
     );
   }

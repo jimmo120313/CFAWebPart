@@ -3993,6 +3993,11 @@
         }
       }
     },
+    "camljs": {
+      "version": "2.11.0",
+      "resolved": "https://registry.npmjs.org/camljs/-/camljs-2.11.0.tgz",
+      "integrity": "sha512-gzBiBwDbRtzqmtoZvA+rP3le4oDpxVIlYE95+wYZ3k6BXTqhwnUBg81iwcHHECIrFCOk2zwZ/d7OEfr4yccEPQ=="
+    },
     "caniuse-api": {
       "version": "1.6.1",
       "resolved": "https://registry.npmjs.org/caniuse-api/-/caniuse-api-1.6.1.tgz",

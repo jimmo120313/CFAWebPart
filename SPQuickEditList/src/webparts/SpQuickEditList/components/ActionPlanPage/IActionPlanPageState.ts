@@ -1,7 +1,7 @@
 export interface IActionPlanPageState {
   brigadeOption: any[];
-  ratingOption: [];
-  ViabilityOption: [];
-  EndState: [];
-  Classification: [];
+  ratingOption: any[];
+  ViabilityOption: any[];
+  EndState: any[];
+  Classification: any[];
 }

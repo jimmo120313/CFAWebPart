@@ -9,7 +9,6 @@ import {
 
 import * as strings from "SpQuickEditListWebPartStrings";
 import { AppContainer, IAppContainerProps } from "./components";
-import { IBrigade } from "../../models";
 import { sp } from "@pnp/sp";
 
 export interface ISpQuickEditListWebPartProps {

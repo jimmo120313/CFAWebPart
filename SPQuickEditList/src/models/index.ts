@@ -1,5 +1,4 @@
-export * from "./IABR";
-export * from "./IBrigade";
+export * from "./IActionPlan";
 export * from "./IReviewPeriod";
 export * from "./IDistrict";
 export * from "./ISolutionDropdownOption";

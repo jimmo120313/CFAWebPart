@@ -1,5 +1,4 @@
-export interface IABR {
-  id: string;
+export interface IActionPlan {
   reviewId: string;
   brigadeId?: string;
   brigadeName?: string;

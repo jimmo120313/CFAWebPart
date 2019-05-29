@@ -1,10 +1,8 @@
 import { sp } from "@pnp/sp";
 import {
-  IBrigade,
-  IReviewPeriod,
-  IDistrict,
   ISolutionDropdownOption,
-  IBrigadeDataListOption
+  IBrigadeDataListOption,
+  IActionPlan
 } from "../models/index";
 
 export class ABRService {
@@ -66,5 +64,39 @@ export class ABRService {
         });
       });
     return this.district;
+  }
+
+  public async _getABR(
+    reviewPeriod: string,
+    selectedBrigade: IBrigadeDataListOption
+  ): Promise<IActionPlan[]> {
+    let q: string = "District/Title eq '" + district + "'";
+    let abrDetail: IActionPlan[] = [];
+    const allBrigade = await sp.web.lists
+      .getByTitle("Action Plans")
+      .items.select(
+        "ID",
+        "Annual Brigade Review/ID",
+        "Brigade/ID",
+        "Brigade/Title",
+        "Year",
+        "DateStarted",
+        "ActionPlanCompletedBy",
+        "District/ID",
+        "District/Title",
+        "Region/ID",
+        "Region/Title"
+      )
+      .expand("Annual Brigade Review")
+      .filter(q)
+      .getAll();
+
+    for (let i = 0; i < allBrigade.length; i++) {
+      brigade.push({
+        key: i,
+        brigadeName: allBrigade[i].Title
+      });
+    }
+    return brigade;
   }
 }

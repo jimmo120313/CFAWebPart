@@ -3,9 +3,9 @@ import { IAppContainerProps } from "./IAppContainerProps";
 import styles from "./AppContainer.module.scss";
 import { SpQuickEditList } from "../SpQuickEditList/SpQuickEditList";
 import { LandingPage } from "../LandingPage";
+import { ActionPlanPage } from "../ActionPlanPage";
 import { sp } from "@pnp/sp";
 import {
-  IBrigade,
   IReviewPeriod,
   ISolutionDropdownOption,
   IBrigadeDataListOption
@@ -39,12 +39,16 @@ export class AppContainer extends React.Component<
 
   public render(): React.ReactElement<IAppContainerProps> {
     if (this.state.isActionPlanCreated) {
-      return <SpQuickEditList />;
+      return (
+        <ActionPlanPage
+          selectedBrigade={this.state.selectedBrigade}
+          reviewPeriod={this.state.selectedReviewPeriod}
+        />
+      );
     } else {
       return (
         <div>
           <LandingPage onCreateActionPlan={this._createActionPlanClicked} />
-          {/* <SpQuickEditList /> */}
         </div>
       );
     }

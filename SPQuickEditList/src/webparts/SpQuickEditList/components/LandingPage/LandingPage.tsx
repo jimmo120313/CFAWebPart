@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ILandingPageProps, ILandingPageState } from "./index";
 import {
-  IBrigade,
   IReviewPeriod,
   ISolutionDropdownOption,
   IBrigadeDataListOption
