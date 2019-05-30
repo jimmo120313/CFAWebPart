@@ -14,14 +14,26 @@ import { IAppContainerState } from "./IAppContainerState";
 export class AppContainer extends React.Component<
   IAppContainerProps,
   IAppContainerState
-> {
+  > {
   constructor(props: IAppContainerProps) {
     super(props);
+    let testReviewPeriod = "2017/18"
+    let testselectedBrigade: IBrigadeDataListOption[] = [];
+    let e = {
+      "brigadeId": 853,
+      "brigadeName": "Nulla Vale",
+      "itemType": "0"
+    }
+
+    testselectedBrigade.push(e);
+    //this.setState({ selectedBrigade: testselectedBrigade, selectedReviewPeriod: testReviewPeriod })
     this.state = {
-      selectedBrigade: [],
-      selectedReviewPeriod: "",
+      selectedBrigade: testselectedBrigade,
+      selectedReviewPeriod: testReviewPeriod,
       isActionPlanCreated: false
     };
+
+
   }
 
   private _createActionPlanClicked = (
@@ -37,19 +49,26 @@ export class AppContainer extends React.Component<
   };
 
   public render(): React.ReactElement<IAppContainerProps> {
-    if (this.state.isActionPlanCreated) {
-      return (
-        <ActionPlanPage
-          selectedBrigade={this.state.selectedBrigade}
-          reviewPeriod={this.state.selectedReviewPeriod}
-        />
-      );
-    } else {
-      return (
-        <div>
-          <LandingPage onCreateActionPlan={this._createActionPlanClicked} />
-        </div>
-      );
-    }
+
+
+
+    return (<ActionPlanPage
+      selectedBrigade={this.state.selectedBrigade}
+      reviewPeriod={this.state.selectedReviewPeriod}
+    />)
+    // if (this.state.isActionPlanCreated) {
+    //   return (
+    //     <ActionPlanPage
+    //       selectedBrigade={this.state.selectedBrigade}
+    //       reviewPeriod={this.state.selectedReviewPeriod}
+    //     />
+    //   );
+    // } else {
+    //   return (
+    //     <div>
+    //       <LandingPage onCreateActionPlan={this._createActionPlanClicked} />
+    //     </div>
+    //   );
+    // }
   }
 }

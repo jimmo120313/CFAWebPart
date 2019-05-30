@@ -77,18 +77,35 @@ export class ABRService {
       brigadesId.push(e.brigadeId);
     });
 
+    // let query = new CamlBuilder()
+    //   .View([
+    //     "ID",
+    //     "Review",
+    //     "Year",
+    //     "DateStarted",
+    //     "ActionPlanCompletedBy",
+    //     "District",
+    //     "Region"
+    //   ])
+    //   .LeftJoin("Brigade", "Brigade")
+    //   .Select("ID", "BrigadeId")
+    //   .Query()
+    //   .Where()
+    //   .NumberField("BrigadeId")
+    //   // .Id()
+    //   .In([23, 853]);
     let query = new CamlBuilder()
       .View([
-        "ID",
+        "Brigade",
         "Review",
         "Year",
         "DateStarted",
         "ActionPlanCompletedBy",
         "District",
-        "Region"
+        "Region",
+        "BrigadeTitle"
       ])
-      .LeftJoin("Brigade", "Brigade")
-      .Select("ID", "Title")
+      .LeftJoin("Brigade", "Brigade").Select("Title", "BrigadeTitle")
       .Query()
       .Where()
       .LookupField("Brigade")
@@ -100,7 +117,7 @@ export class ABRService {
     let actionPlanDetail: IActionPlan[] = [];
     const allActionPlan = await sp.web.lists
       .getByTitle("Action Plans")
-      .getItemsByCAMLQuery({ ViewXml: query.ToString() });
+      .getItemsByCAMLQuery({ ViewXml: xml });
     // .items.select(
     //   "Review/ID",
     //   "Brigade/ID",

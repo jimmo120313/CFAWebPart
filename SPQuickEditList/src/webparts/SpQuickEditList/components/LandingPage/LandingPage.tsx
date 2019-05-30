@@ -25,7 +25,7 @@ import {
 export class LandingPage extends React.Component<
   ILandingPageProps,
   ILandingPageState
-> {
+  > {
   private brigade = new ABRService();
   private _selection: Selection;
   private _allBrigadeOption: IBrigadeDataListOption[];
@@ -96,8 +96,8 @@ export class LandingPage extends React.Component<
     this.setState({
       brigadeOption: text
         ? this._allBrigadeOption.filter(
-            i => i.brigadeName.toLowerCase().indexOf(text) > -1
-          )
+          i => i.brigadeName.toLowerCase().indexOf(text) > -1
+        )
         : this._allBrigadeOption
     });
   };
@@ -171,7 +171,8 @@ export class LandingPage extends React.Component<
             selectionPreservedOnEmptyClick={true}
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            //onItemInvoked={this._onItemInvoked}    //This is for action Double click
+
+          //onItemInvoked={this._onItemInvoked}    //This is for action Double click
           />
         </MarqueeSelection>
         <PrimaryButton
