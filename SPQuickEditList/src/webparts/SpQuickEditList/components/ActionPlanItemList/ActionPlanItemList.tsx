@@ -1,8 +1,7 @@
 import * as React from "react";
-require("./SpQuickEditList.module.scss");
-import { IActionPlanListProps, IActionPlanListState } from "./index";
+require("./ActionPlanItemList.module.scss");
+import { IActionPlanItemListProp, IActionPlanItemListState } from "./index";
 import ReactDataGrid from "react-data-grid";
-import { IABR } from "../../../../models/index";
 import { ABRService } from "../../../../services/index";
 
 const columns = [
@@ -17,13 +16,13 @@ const rows = [
   { id: 2, title: "row1", count: 60 }
 ];
 
-export class ActionPlanList extends React.Component<
-  IActionPlanListProps,
-  IActionPlanListState
+export class ActionPlanItemList extends React.Component<
+  IActionPlanItemListProp,
+  IActionPlanItemListState
 > {
   private abrService: ABRService;
 
-  public render(): React.ReactElement<IActionPlanListProps> {
+  public render(): React.ReactElement<IActionPlanItemListProp> {
     return (
       <ReactDataGrid
         columns={columns}

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { IAppContainerProps } from "./IAppContainerProps";
 import styles from "./AppContainer.module.scss";
-import { SpQuickEditList } from "../SpQuickEditList/SpQuickEditList";
 import { LandingPage } from "../LandingPage";
 import { ActionPlanPage } from "../ActionPlanPage";
 import { sp } from "@pnp/sp";
@@ -29,7 +28,7 @@ export class AppContainer extends React.Component<
     brigades: IBrigadeDataListOption[],
     reviewPeriod: string
   ): void => {
-    debugger;
+    //debugger;
     this.setState({
       selectedBrigade: brigades,
       selectedReviewPeriod: reviewPeriod,

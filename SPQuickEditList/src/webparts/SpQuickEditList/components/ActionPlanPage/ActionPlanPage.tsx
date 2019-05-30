@@ -1,7 +1,6 @@
 import * as React from "react";
 import { IActionPlanPageProps, IActionPlanPageState } from "./index";
-import { ActionPlanList } from "../ActionPlanList/index";
-import { ABRList } from "../ABRList/index";
+import { ActionPlanMasterList } from "../ActionPlanMasterList/index";
 import {
   IReviewPeriod,
   ISolutionDropdownOption,
@@ -20,7 +19,8 @@ export class ActionPlanPage extends React.Component<
   constructor(props: IActionPlanPageProps) {
     super(props);
     this.state = {
-      brigadeOption: [],
+      brigadeOption: this.props.selectedBrigade,
+      reviewPeriod: this.props.reviewPeriod,
       ratingOption: [],
       ViabilityOption: [],
       EndState: [],
@@ -83,7 +83,10 @@ export class ActionPlanPage extends React.Component<
           options={this.state.districtOption}
           onChanged={this._onDistrictSelected}
         /> */}
-        <ABRList />
+        <ActionPlanMasterList
+          reviewPeriod={this.state.reviewPeriod}
+          selectedBrigade={this.state.brigadeOption}
+        />
         {/* <ActionPlanList /> */}
       </div>
     );

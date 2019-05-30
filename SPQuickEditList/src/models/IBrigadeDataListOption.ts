@@ -1,4 +1,4 @@
 export interface IBrigadeDataListOption {
-  key: number;
+  brigadeId: number;
   brigadeName: string;
 }

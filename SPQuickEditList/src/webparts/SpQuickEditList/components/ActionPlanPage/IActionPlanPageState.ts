@@ -4,4 +4,5 @@ export interface IActionPlanPageState {
   ViabilityOption: any[];
   EndState: any[];
   Classification: any[];
+  reviewPeriod: string;
 }
