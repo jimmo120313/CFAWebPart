@@ -78,6 +78,7 @@ export class ABRService {
       brigadesId.push(e.brigadeId);
     });
 
+    //Generate Query
     let query = new CamlBuilder()
       .View([
         "ID",
@@ -107,23 +108,25 @@ export class ABRService {
       .Where()
       .LookupField("Brigade")
       .Id()
-      .In(brigadesId)
+      .In(brigadesId).And().TextField("Year")
+      .EqualTo(reviewPeriod)
       .ToString();
 
-    let actionPlanDetail: IActionPlan[] = [];
-    const allActionPlan = await sp.site.get();
-    // .expand("RootFolder, ParentWeb")
-    // .select("Title,RootFolder/ServerRelativeUrl, ParentWeb/Url")
-    // .get();
-    console.log("test1");
-    console.log(allActionPlan);
 
+    let actionPlanDetail: IActionPlan[] = [];
+    const webDetail = await sp.web.get();
+    const abrListUrl = webDetail.Url + "/Lists/ABRReview"
+    const actionPlanReport = webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3"
+
+    //Get row detail form Aciton Plan list
+    const allActionPlan = await sp.web.lists
+      .getByTitle("Action Plans")
+      .renderListDataAsStream({ ViewXml: query });
     const row = allActionPlan.Row;
 
     for (let i = 0; i < row.length; i++) {
-      let reviewURL = ""; //sp.web.getList("ABRReview").toUrl;
-      // `AAATEST/ABR/Demo/Lists/ABRReview/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=` + row[i].ReviewID;
-      let reportURL = "";
+      let reviewURL = abrListUrl + "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" + row[i].ReviewID;
+      let reportURL = actionPlanReport.replace("{0}", row[i].ReviewID);
       actionPlanDetail.push({
         reviewId: row[i].ReviewID,
         brigadeId: row[i].BrigadeId,
@@ -142,4 +145,6 @@ export class ABRService {
     console.log(actionPlanDetail);
     return actionPlanDetail;
   }
+
+
 }

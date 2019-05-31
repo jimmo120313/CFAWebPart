@@ -8,40 +8,53 @@ import ReactDataGrid from "react-data-grid";
 import { IActionPlan } from "../../../../models/index";
 import { ABRService } from "../../../../services/index";
 
+
 const columns = [
-  { key: "id", name: "ID" },
-  { key: "title", name: "Title" },
-  { key: "count", name: "Count" }
+  { key: "brigadeName", name: "Brigade" },
+  { key: "reviewPeriod", name: "Review Year" },
+  { key: "dateStarted", name: "Date Started" },
+  { key: "completedBy", name: "Action Plan Completed By" },
+  { key: "districtName", name: "District" },
+  { key: "regionName", name: "Region" },
+  { key: "reviewDetail", name: "Review Detail" },
+  { key: "actionPlanReportURL", name: "Action Plan Report" },
+  { key: "reviewId", name: "Review ID" }
 ];
 
-const rows = [
-  { id: 0, title: "row1", count: 20 },
-  { id: 1, title: "row1", count: 40 },
-  { id: 2, title: "row1", count: 60 }
-];
+let actionPlanDetail: IActionPlan[]
 
 export class ActionPlanMasterList extends React.Component<
+
   IActionPlanMasterListProps,
   IActionPlanMasterListState
-> {
+  > {
   private actionPlanService = new ABRService();
 
+
+  constructor(props: IActionPlanMasterListProps) {
+    super(props);
+    this.state = {
+      rows: {}
+    };
+
+
+  }
   public async componentDidMount(): Promise<void> {
     //this.brigade._getBrigadeDetail();
-    this.actionPlanService._getActionPlanMaster(
+    actionPlanDetail = await this.actionPlanService._getActionPlanMaster(
       this.props.reviewPeriod,
       this.props.selectedBrigade
     );
-    // .then((option: ISolutionDropdownOption[]) => {
-    //   this.setState({ reviewPeriodOption: option });
-    // });
+    this.setState({ rows: actionPlanDetail })
+
+
   }
 
   public render(): React.ReactElement<IActionPlanMasterListProps> {
     return (
       <ReactDataGrid
         columns={columns}
-        rowGetter={i => rows[i]}
+        rowGetter={i => this.state.rows[i]}
         rowsCount={3}
         minHeight={150}
       />
