@@ -5,6 +5,7 @@ import {
   IActionPlan
 } from "../models/index";
 import * as CamlBuilder from "camljs";
+import * as strings from "SpQuickEditListWebPartStrings";
 
 export class ABRService {
   private reviewPeriod: ISolutionDropdownOption[] = [];
@@ -70,96 +71,75 @@ export class ABRService {
   public async _getActionPlanMaster(
     reviewPeriod: string,
     selectedBrigade: IBrigadeDataListOption[]
-  ): Promise<void> {
+  ): Promise<IActionPlan[]> {
     let brigadesId = new Array();
 
     selectedBrigade.forEach(e => {
       brigadesId.push(e.brigadeId);
     });
 
-    // let query = new CamlBuilder()
-    //   .View([
-    //     "ID",
-    //     "Review",
-    //     "Year",
-    //     "DateStarted",
-    //     "ActionPlanCompletedBy",
-    //     "District",
-    //     "Region"
-    //   ])
-    //   .LeftJoin("Brigade", "Brigade")
-    //   .Select("ID", "BrigadeId")
-    //   .Query()
-    //   .Where()
-    //   .NumberField("BrigadeId")
-    //   // .Id()
-    //   .In([23, 853]);
     let query = new CamlBuilder()
       .View([
-        "Brigade",
-        "Review",
+        "ID",
+        "BrigadeId",
+        "BrigadeTitle",
         "Year",
         "DateStarted",
         "ActionPlanCompletedBy",
-        "District",
-        "Region",
-        "BrigadeTitle"
+        "DistrictId",
+        "DistrictTitle",
+        "RegionId",
+        "RegionTitle",
+        "ReviewID"
       ])
-      .LeftJoin("Brigade", "Brigade").Select("Title", "BrigadeTitle")
+      .LeftJoin("Brigade", "Brigade")
+      .Select("Title", "BrigadeTitle")
+      .Select("ID", "BrigadeId")
+      .LeftJoin("District", "District")
+      .Select("Title", "DistrictTitle")
+      .Select("ID", "DistrictId")
+      .LeftJoin("Region", "Region")
+      .Select("Title", "RegionTitle")
+      .Select("ID", "RegionId")
+      .LeftJoin("Review", "Review")
+      .Select("ID", "ReviewID")
       .Query()
       .Where()
       .LookupField("Brigade")
       .Id()
-      .In(brigadesId);
+      .In(brigadesId)
+      .ToString();
 
-    let xml = query.ToString();
-    console.log(xml);
     let actionPlanDetail: IActionPlan[] = [];
-    const allActionPlan = await sp.web.lists
-      .getByTitle("Action Plans")
-      .getItemsByCAMLQuery({ ViewXml: xml });
-    // .items.select(
-    //   "Review/ID",
-    //   "Brigade/ID",
-    //   "Brigade/Title",
-    //   "Year",
-    //   "DateStarted",
-    //   "ActionPlanCompletedBy",
-    //   "District/ID",
-    //   "District/Title",
-    //   "Region/ID",
-    //   "Region/Title"
-    // )
-    // .expand("Review", "Brigade", "District", "Region")
-    // .filter("Brigade/ID in " + brigadesId)
-    //.getAll();
+    const allActionPlan = await sp.site.get();
+    // .expand("RootFolder, ParentWeb")
+    // .select("Title,RootFolder/ServerRelativeUrl, ParentWeb/Url")
+    // .get();
+    console.log("test1");
     console.log(allActionPlan);
 
-    // let actionPlanDetail: IActionPlan[] = [];
-    // const allActionPlan = await sp.web.lists
-    //   .getByTitle("Action Plans")
-    //   .items.select(
-    //     "Review/ID",
-    //     "Brigade/ID",
-    //     "Brigade/Title",
-    //     "Year",
-    //     "DateStarted",
-    //     "ActionPlanCompletedBy",
-    //     "District/ID",
-    //     "District/Title",
-    //     "Region/ID",
-    //     "Region/Title"
-    //   )
-    //   .expand("Review", "Brigade", "District", "Region")
-    //   .filter("Brigade/ID in " + brigadesId)
-    //   .getAll();
-    // console.log(allActionPlan);
-    // for (let i = 0; i < allActionPlan.length; i++) {
-    //   actionPlanDetail.push({
-    //     key: i,
-    //     brigadeName: allBrigade[i].Title
-    //   });
-    // }
-    // return brigade;
+    const row = allActionPlan.Row;
+
+    for (let i = 0; i < row.length; i++) {
+      let reviewURL = ""; //sp.web.getList("ABRReview").toUrl;
+      // `AAATEST/ABR/Demo/Lists/ABRReview/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=` + row[i].ReviewID;
+      let reportURL = "";
+      actionPlanDetail.push({
+        reviewId: row[i].ReviewID,
+        brigadeId: row[i].BrigadeId,
+        brigadeName: row[i].BrigadeTitle,
+        reviewPeriod: row[i].Year,
+        dateStarted: row[i].DateStarted,
+        completedBy: row[i].ActionPlanCompletedBy,
+        districtId: row[i].DistrictId,
+        districtName: row[i].DistrictTitle,
+        regionId: row[i].RegionId,
+        regionName: row[i].RegionTitle,
+        actionPlanReportURL: reportURL,
+        reviewDetail: reviewURL
+      });
+    }
+    console.log(actionPlanDetail);
+    return actionPlanDetail;
   }
 }
