@@ -7,6 +7,14 @@ import {
 import ReactDataGrid from "react-data-grid";
 import { IActionPlan } from "../../../../models/index";
 import { ABRService } from "../../../../services/index";
+import { registerBeforeUnloadHandler } from "@microsoft/teams-js";
+
+
+export class redd extends React.Component<any, any>{
+  render() {
+    return (<div><a href={this.props.dependentValues.actionPlanReportURL}>Action Plan Report</a></div>);
+  }
+}
 
 
 const columns = [
@@ -17,11 +25,14 @@ const columns = [
   { key: "districtName", name: "District" },
   { key: "regionName", name: "Region" },
   { key: "reviewDetail", name: "Review Detail" },
-  { key: "actionPlanReportURL", name: "Action Plan Report" },
+  { key: "actionPlanReportURL", name: "Action Plan Report", width: 1000, getRowMetaData: (row) => row, formatter: redd },
   { key: "reviewId", name: "Review ID" }
 ];
 
 let actionPlanDetail: IActionPlan[]
+const actionPlanColumns = () => {
+
+}
 
 export class ActionPlanMasterList extends React.Component<
 
@@ -29,6 +40,7 @@ export class ActionPlanMasterList extends React.Component<
   IActionPlanMasterListState
   > {
   private actionPlanService = new ABRService();
+
 
 
   constructor(props: IActionPlanMasterListProps) {
@@ -50,6 +62,24 @@ export class ActionPlanMasterList extends React.Component<
 
   }
 
+  _actionPlanReportURLActions = [
+    {
+      actions: [
+        {
+          text: "Option 1",
+          callback: () => {
+            alert("Option 1 clicked");
+          }
+        }
+      ]
+    }
+  ];
+  private _getCellActions: any = (column, row) => {
+    const cellActions = {
+      actionPlanReportURL: this._actionPlanReportURLActions
+    };
+    return cellActions[column.key];
+  }
   public render(): React.ReactElement<IActionPlanMasterListProps> {
     return (
       <ReactDataGrid
@@ -57,6 +87,7 @@ export class ActionPlanMasterList extends React.Component<
         rowGetter={i => this.state.rows[i]}
         rowsCount={3}
         minHeight={150}
+        getCellActions={this._getCellActions}
       />
     );
   }

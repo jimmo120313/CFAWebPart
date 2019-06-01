@@ -123,7 +123,7 @@ export class ABRService {
       .getByTitle("Action Plans")
       .renderListDataAsStream({ ViewXml: query });
     const row = allActionPlan.Row;
-
+    console.log(row);
     for (let i = 0; i < row.length; i++) {
       let reviewURL = abrListUrl + "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" + row[i].ReviewID;
       let reportURL = actionPlanReport.replace("{0}", row[i].ReviewID);
