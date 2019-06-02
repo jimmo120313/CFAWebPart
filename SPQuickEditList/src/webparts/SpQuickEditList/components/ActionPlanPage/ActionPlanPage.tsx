@@ -1,6 +1,7 @@
 import * as React from "react";
 import { IActionPlanPageProps, IActionPlanPageState } from "./index";
 import { ActionPlanMasterList } from "../ActionPlanMasterList/index";
+import { ActionPlanItemList } from "../ActionPlanItemList/index";
 import {
   IReviewPeriod,
   ISolutionDropdownOption,
@@ -13,14 +14,15 @@ import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 export class ActionPlanPage extends React.Component<
   IActionPlanPageProps,
   IActionPlanPageState
-> {
-  private brigade = new ABRService();
+  > {
+  private abrService = new ABRService();
 
   constructor(props: IActionPlanPageProps) {
     super(props);
     this.state = {
       brigadeOption: this.props.selectedBrigade,
       reviewPeriod: this.props.reviewPeriod,
+      selectedBrigade: this.props.selectedBrigade,
       ratingOption: [],
       ViabilityOption: [],
       EndState: [],
@@ -29,17 +31,14 @@ export class ActionPlanPage extends React.Component<
   }
   public async componentDidMount(): Promise<void> {
     //Get Rating
-    // this.brigade
-    //   ._getReviewPeriodOption()
-    //   .then((option: ISolutionDropdownOption[]) => {
-    //     this.setState({ reviewPeriodOption: option });
-    //   });
+    let rating = this.abrService._getRating();
+    this.setState({ ratingOption: rating })
     //Get Viability Category
-    // this.brigade
-    //   ._getDistrictOption()
-    //   .then((option: ISolutionDropdownOption[]) => {
-    //     this.setState({ districtOption: option });
-    //   });
+    this.abrService
+      ._getViabilityCategoryOption()
+      .then((option: ISolutionDropdownOption[]) => {
+        this.setState({ ViabilityOption: option });
+      });
     // //Get End State
     // this.brigade
     //   ._getDistrictOption()
@@ -60,20 +59,20 @@ export class ActionPlanPage extends React.Component<
         <Dropdown
           placeHolder="Brigade (Multi Select)"
           options={this.state.brigadeOption}
-          //onChanged={this._onReviewPeriodSelected}
+        //onChanged={this._onReviewPeriodSelected}
         />
-        {/*
+
         <Dropdown
           placeHolder="Rating (Multi Select)"
-          options={this.state.districtOption}
-          onChanged={this._onDistrictSelected}
+          options={this.state.ratingOption}
+        //onChanged={this._onDistrictSelected}
         />
         <Dropdown
           placeHolder="Viability Category"
-          options={this.state.districtOption}
-          onChanged={this._onDistrictSelected}
+          options={this.state.ViabilityOption}
+        //onChanged={this._onDistrictSelected}
         />
-        <Dropdown
+        {/* <Dropdown
           placeHolder="End State (Question Ref)"
           options={this.state.districtOption}
           onChanged={this._onDistrictSelected}
@@ -87,7 +86,14 @@ export class ActionPlanPage extends React.Component<
           reviewPeriod={this.state.reviewPeriod}
           selectedBrigade={this.state.brigadeOption}
         />
-        {/* <ActionPlanList /> */}
+
+        <ActionPlanItemList
+          selectedBrigade={this.state.brigadeOption}
+          fRating={this.state.ratingOption}
+          fVCategory={this.state.ViabilityOption}
+          fEndState={this.state.EndState}
+          fClassification={this.state.Classification}
+        />
       </div>
     );
   }

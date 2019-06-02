@@ -10,6 +10,9 @@ import * as strings from "SpQuickEditListWebPartStrings";
 export class ABRService {
   private reviewPeriod: ISolutionDropdownOption[] = [];
   private district: ISolutionDropdownOption[] = [];
+  private viabilityCategory: ISolutionDropdownOption[] = [];
+  private ratingOpion: ISolutionDropdownOption[] = [];
+
 
   public async _getBrigadeOption(
     district: string
@@ -66,6 +69,44 @@ export class ABRService {
         });
       });
     return this.district;
+  }
+
+  public _getRating(): ISolutionDropdownOption[] {
+
+    let vCategoryObj: ISolutionDropdownOption[] = [
+      {
+        key: "1",
+        text: "Red"
+      },
+      {
+        key: "2",
+        text: "Yellow"
+      },
+      {
+        key: "3",
+        text: "Green"
+      }
+
+    ]
+    return vCategoryObj;
+  };
+
+
+  public async _getViabilityCategoryOption(): Promise<ISolutionDropdownOption[]> {
+    const vc = await sp.web.lists
+      .getByTitle("ViabilityCategory")
+      .items.select("ID", "Title")
+      .get()
+
+    vc.forEach(d => {
+      let vCategoryObj: ISolutionDropdownOption = {
+        key: d.ID,
+        text: d.Title
+      };
+      this.viabilityCategory.push(vCategoryObj);
+    });
+
+    return this.viabilityCategory;
   }
 
   public async _getActionPlanMaster(

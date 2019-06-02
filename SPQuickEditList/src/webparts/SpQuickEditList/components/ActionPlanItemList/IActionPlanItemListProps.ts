@@ -1,3 +1,7 @@
 export interface IActionPlanItemListProp {
-  description?: string;
+  selectedBrigade: any[],
+  fRating: any[],
+  fVCategory: any[],
+  fEndState: any[],
+  fClassification: any[]
 }
