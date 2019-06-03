@@ -13,7 +13,6 @@ export class ABRService {
   private viabilityCategory: ISolutionDropdownOption[] = [];
   private ratingOpion: ISolutionDropdownOption[] = [];
 
-
   public async _getBrigadeOption(
     district: string
   ): Promise<IBrigadeDataListOption[]> {
@@ -72,7 +71,6 @@ export class ABRService {
   }
 
   public _getRating(): ISolutionDropdownOption[] {
-
     let vCategoryObj: ISolutionDropdownOption[] = [
       {
         key: "1",
@@ -86,17 +84,17 @@ export class ABRService {
         key: "3",
         text: "Green"
       }
-
-    ]
+    ];
     return vCategoryObj;
-  };
+  }
 
-
-  public async _getViabilityCategoryOption(): Promise<ISolutionDropdownOption[]> {
+  public async _getViabilityCategoryOption(): Promise<
+    ISolutionDropdownOption[]
+  > {
     const vc = await sp.web.lists
       .getByTitle("ViabilityCategory")
       .items.select("ID", "Title")
-      .get()
+      .get();
 
     vc.forEach(d => {
       let vCategoryObj: ISolutionDropdownOption = {
@@ -108,6 +106,80 @@ export class ABRService {
 
     return this.viabilityCategory;
   }
+
+  // public async _getActionPlanMaster(
+  //   reviewPeriod: string,
+  //   selectedBrigade: IBrigadeDataListOption[]
+  // ): Promise<IActionPlan[]> {
+  //   let brigadesId = new Array();
+
+  //   selectedBrigade.forEach(e => {
+  //     brigadesId.push(e.brigadeId);
+  //   });
+
+  //   //Generate Query
+  //   let query = new CamlBuilder()
+  //     .View([
+  //       "ID",
+  //       "BrigadeTitle",
+  //       "Title",
+  //       "ViabilityCategory",
+  //       "SubCategory",
+  //       "Rating",
+  //       "Challenge",
+  //       "Treatment",
+  //       "Initiative",
+  //       "AssignedTo",
+  //       "Priority",
+  //       "Due",
+  //       "Status" //,
+  //       //"Classification"
+  //     ])
+  //     .LeftJoin("Brigade", "Brigade")
+  //     .Select("Title", "BrigadeTitle")
+  //     // .LeftJoin("ReviewID", "ABRReview")
+  //     // .LeftJoin("Class", "Class", "ABRReview")
+  //     // .Select("Title", "Classification")
+  //     .Query()
+  //     .ToString();
+
+  //   let actionPlanDetail: IActionPlan[] = [];
+  //   const webDetail = await sp.web.get();
+  //   const abrListUrl = webDetail.Url + "/Lists/ABRReview";
+  //   const actionPlanReport =
+  //     webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3";
+  //   debugger;
+  //   //Get row detail form Aciton Plan list
+  //   const allActionPlan = await sp.web.lists
+  //     .getByTitle("Action Plans")
+  //     .renderListDataAsStream({ ViewXml: query });
+  //   const row = allActionPlan.Row;
+
+  //   for (let i = 0; i < row.length; i++) {
+  //     let reviewURL =
+  //       abrListUrl +
+  //       "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" +
+  //       row[i].ReviewID;
+  //     let reportURL = actionPlanReport.replace("{0}", row[i].ReviewID);
+  //     actionPlanDetail.push({
+  //       reviewId: row[i].ReviewID,
+  //       brigadeId: row[i].BrigadeId,
+  //       brigadeName: row[i].BrigadeTitle,
+  //       reviewPeriod: row[i].Year,
+  //       dateStarted: row[i].DateStarted,
+  //       completedBy: row[i].ActionPlanCompletedBy,
+  //       districtId: row[i].DistrictId,
+  //       districtName: row[i].DistrictTitle,
+  //       regionId: row[i].RegionId,
+  //       regionName: row[i].RegionTitle,
+  //       actionPlanReportURL: reportURL,
+  //       reviewDetail: reviewURL,
+  //       classification: row[i].Classification
+  //     });
+  //   }
+
+  //   return actionPlanDetail;
+  // }
 
   public async _getActionPlanMaster(
     reviewPeriod: string,
@@ -132,7 +204,8 @@ export class ABRService {
         "DistrictTitle",
         "RegionId",
         "RegionTitle",
-        "ReviewID"
+        "ReviewID",
+        "Classification"
       ])
       .LeftJoin("Brigade", "Brigade")
       .Select("Title", "BrigadeTitle")
@@ -145,28 +218,35 @@ export class ABRService {
       .Select("ID", "RegionId")
       .LeftJoin("Review", "Review")
       .Select("ID", "ReviewID")
+      .LeftJoin("Class", "Class", "Review")
+      .Select("Title", "Classification")
       .Query()
       .Where()
       .LookupField("Brigade")
       .Id()
-      .In(brigadesId).And().TextField("Year")
+      .In(brigadesId)
+      .And()
+      .TextField("Year")
       .EqualTo(reviewPeriod)
       .ToString();
 
-
     let actionPlanDetail: IActionPlan[] = [];
     const webDetail = await sp.web.get();
-    const abrListUrl = webDetail.Url + "/Lists/ABRReview"
-    const actionPlanReport = webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3"
+    const abrListUrl = webDetail.Url + "/Lists/ABRReview";
+    const actionPlanReport =
+      webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3";
 
     //Get row detail form Aciton Plan list
     const allActionPlan = await sp.web.lists
       .getByTitle("Action Plans")
       .renderListDataAsStream({ ViewXml: query });
     const row = allActionPlan.Row;
-    console.log(row);
+    console.log(allActionPlan);
     for (let i = 0; i < row.length; i++) {
-      let reviewURL = abrListUrl + "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" + row[i].ReviewID;
+      let reviewURL =
+        abrListUrl +
+        "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" +
+        row[i].ReviewID;
       let reportURL = actionPlanReport.replace("{0}", row[i].ReviewID);
       actionPlanDetail.push({
         reviewId: row[i].ReviewID,
@@ -180,12 +260,11 @@ export class ABRService {
         regionId: row[i].RegionId,
         regionName: row[i].RegionTitle,
         actionPlanReportURL: reportURL,
-        reviewDetail: reviewURL
+        reviewDetail: reviewURL,
+        classification: row[i].Classification
       });
     }
     console.log(actionPlanDetail);
     return actionPlanDetail;
   }
-
-
 }

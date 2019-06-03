@@ -14,16 +14,16 @@ import { IAppContainerState } from "./IAppContainerState";
 export class AppContainer extends React.Component<
   IAppContainerProps,
   IAppContainerState
-  > {
+> {
   constructor(props: IAppContainerProps) {
     super(props);
-    let testReviewPeriod = "2017/18"
+    let testReviewPeriod = "2017/18";
     let testselectedBrigade: IBrigadeDataListOption[] = [];
     let e = {
-      "brigadeId": 853,
-      "brigadeName": "Nulla Vale",
-      "itemType": "0"
-    }
+      brigadeId: 598,
+      brigadeName: "Kongwak & District",
+      itemType: "0"
+    };
 
     testselectedBrigade.push(e);
     //this.setState({ selectedBrigade: testselectedBrigade, selectedReviewPeriod: testReviewPeriod })
@@ -32,8 +32,6 @@ export class AppContainer extends React.Component<
       selectedReviewPeriod: testReviewPeriod,
       isActionPlanCreated: false
     };
-
-
   }
 
   private _createActionPlanClicked = (
@@ -49,13 +47,12 @@ export class AppContainer extends React.Component<
   };
 
   public render(): React.ReactElement<IAppContainerProps> {
-
-
-
-    return (<ActionPlanPage
-      selectedBrigade={this.state.selectedBrigade}
-      reviewPeriod={this.state.selectedReviewPeriod}
-    />)
+    return (
+      <ActionPlanPage
+        selectedBrigade={this.state.selectedBrigade}
+        reviewPeriod={this.state.selectedReviewPeriod}
+      />
+    );
     // if (this.state.isActionPlanCreated) {
     //   return (
     //     <ActionPlanPage

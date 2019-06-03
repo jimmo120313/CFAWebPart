@@ -14,7 +14,7 @@ import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 export class ActionPlanPage extends React.Component<
   IActionPlanPageProps,
   IActionPlanPageState
-  > {
+> {
   private abrService = new ABRService();
 
   constructor(props: IActionPlanPageProps) {
@@ -32,7 +32,7 @@ export class ActionPlanPage extends React.Component<
   public async componentDidMount(): Promise<void> {
     //Get Rating
     let rating = this.abrService._getRating();
-    this.setState({ ratingOption: rating })
+    this.setState({ ratingOption: rating });
     //Get Viability Category
     this.abrService
       ._getViabilityCategoryOption()
@@ -56,7 +56,7 @@ export class ActionPlanPage extends React.Component<
   public render(): React.ReactElement<IActionPlanPageProps> {
     return (
       <div>
-        <Dropdown
+        {/* <Dropdown
           placeHolder="Brigade (Multi Select)"
           options={this.state.brigadeOption}
         //onChanged={this._onReviewPeriodSelected}
@@ -71,7 +71,7 @@ export class ActionPlanPage extends React.Component<
           placeHolder="Viability Category"
           options={this.state.ViabilityOption}
         //onChanged={this._onDistrictSelected}
-        />
+        /> */}
         {/* <Dropdown
           placeHolder="End State (Question Ref)"
           options={this.state.districtOption}
@@ -86,14 +86,15 @@ export class ActionPlanPage extends React.Component<
           reviewPeriod={this.state.reviewPeriod}
           selectedBrigade={this.state.brigadeOption}
         />
-
+        {/* 
         <ActionPlanItemList
           selectedBrigade={this.state.brigadeOption}
-          fRating={this.state.ratingOption}
-          fVCategory={this.state.ViabilityOption}
-          fEndState={this.state.EndState}
-          fClassification={this.state.Classification}
-        />
+          reviewPeriod = {this.state.reviewPeriod}
+          // fRating={this.state.ratingOption}
+          // fVCategory={this.state.ViabilityOption}
+          // fEndState={this.state.EndState}
+          // fClassification={this.state.Classification}
+        /> */}
       </div>
     );
   }

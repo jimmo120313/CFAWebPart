@@ -11,4 +11,5 @@ export interface IActionPlan {
   regionName?: string;
   actionPlanReportURL?: string;
   reviewDetail?: string;
+  classification?: string;
 }

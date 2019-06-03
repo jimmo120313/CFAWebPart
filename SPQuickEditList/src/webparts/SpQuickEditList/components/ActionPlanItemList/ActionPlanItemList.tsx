@@ -20,8 +20,24 @@ export class ActionPlanItemList extends React.Component<
   IActionPlanItemListProp,
   IActionPlanItemListState
 > {
-  private abrService: ABRService;
+  private actionPlanService: ABRService;
 
+  constructor(props: IActionPlanItemListProp) {
+    super(props);
+    this.state = {
+      rows: {},
+      selectedBrigade: this.props.selectedBrigade,
+      reviewPeriod: props.reviewPeriod
+    };
+  }
+
+  public async componentDidMount(): Promise<void> {
+    //   let actionPlanListItem = await this.actionPlanService._getActionPlanListItem(
+    //     this.props.reviewPeriod,
+    //     this.props.selectedBrigade
+    //   );
+    //   this.setState({ rows: actionPlanListItem });
+  }
   public render(): React.ReactElement<IActionPlanItemListProp> {
     return (
       <ReactDataGrid

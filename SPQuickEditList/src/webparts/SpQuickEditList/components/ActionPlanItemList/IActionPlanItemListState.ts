@@ -1,3 +1,5 @@
 export interface IActionPlanItemListState {
-  description?: string;
+  selectedBrigade: any[];
+  reviewPeriod: string;
+  rows: any;
 }
