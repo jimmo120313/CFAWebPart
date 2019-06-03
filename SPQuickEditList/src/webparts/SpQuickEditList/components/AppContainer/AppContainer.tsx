@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IAppContainerProps } from "./IAppContainerProps";
-import styles from "./AppContainer.module.scss";
+require("./AppContainer.module.scss");
 import { LandingPage } from "../LandingPage";
 import { ActionPlanPage } from "../ActionPlanPage";
 import { sp } from "@pnp/sp";
@@ -52,10 +52,10 @@ export class AppContainer extends React.Component<
 
 
 
-    return (<ActionPlanPage
+    return (<div className="row"><ActionPlanPage
       selectedBrigade={this.state.selectedBrigade}
       reviewPeriod={this.state.selectedReviewPeriod}
-    />)
+    /></div>)
     // if (this.state.isActionPlanCreated) {
     //   return (
     //     <ActionPlanPage

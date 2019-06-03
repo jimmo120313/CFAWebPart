@@ -56,23 +56,27 @@ export class ActionPlanPage extends React.Component<
   public render(): React.ReactElement<IActionPlanPageProps> {
     return (
       <div>
-        <Dropdown
-          placeHolder="Brigade (Multi Select)"
-          options={this.state.brigadeOption}
-        //onChanged={this._onReviewPeriodSelected}
-        />
+        <div >
+          <Dropdown
+            placeHolder="Brigade (Multi Select)"
+            options={this.state.brigadeOption}
+            className="dd"
+          //onChanged={this._onReviewPeriodSelected}
+          />
 
-        <Dropdown
-          placeHolder="Rating (Multi Select)"
-          options={this.state.ratingOption}
-        //onChanged={this._onDistrictSelected}
-        />
-        <Dropdown
-          placeHolder="Viability Category"
-          options={this.state.ViabilityOption}
-        //onChanged={this._onDistrictSelected}
-        />
-        {/* <Dropdown
+          <Dropdown
+            placeHolder="Rating (Multi Select)"
+            options={this.state.ratingOption}
+            className="dd"
+          //onChanged={this._onDistrictSelected}
+          />
+          <Dropdown
+            placeHolder="Viability Category"
+            options={this.state.ViabilityOption}
+            className="dd"
+          //onChanged={this._onDistrictSelected}
+          />
+          {/* <Dropdown
           placeHolder="End State (Question Ref)"
           options={this.state.districtOption}
           onChanged={this._onDistrictSelected}
@@ -82,13 +86,14 @@ export class ActionPlanPage extends React.Component<
           options={this.state.districtOption}
           onChanged={this._onDistrictSelected}
         /> */}
+        </div>
         <ActionPlanMasterList
           reviewPeriod={this.state.reviewPeriod}
           selectedBrigade={this.state.brigadeOption}
         />
 
         <ActionPlanItemList
-          selectedBrigade={this.state.brigadeOption}
+          selectedBrigade={this.state.selectedBrigade}
           fRating={this.state.ratingOption}
           fVCategory={this.state.ViabilityOption}
           fEndState={this.state.EndState}

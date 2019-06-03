@@ -2,7 +2,8 @@ import { sp, CamlQuery } from "@pnp/sp";
 import {
   ISolutionDropdownOption,
   IBrigadeDataListOption,
-  IActionPlan
+  IActionPlan,
+  IActionPlanItem
 } from "../models/index";
 import * as CamlBuilder from "camljs";
 import * as strings from "SpQuickEditListWebPartStrings";
@@ -109,6 +110,69 @@ export class ABRService {
     return this.viabilityCategory;
   }
 
+  public async _getActionPlanItem(
+    reviewPeriod: string,
+    selectedBrigade: IBrigadeDataListOption[]
+  ): Promise<IActionPlanItem[]> {
+    let brigadesId = new Array();
+
+    selectedBrigade.forEach(e => {
+      brigadesId.push(e.brigadeId);
+    });
+
+    //Generate Query
+    let query = new CamlBuilder()
+      .View([
+        "ID",
+        "BrigadeTitle",
+        "Title",
+        "ViabilityCategory",
+        "SubCategory",
+        "Rating",
+        "Challenge",
+        "Treatment",
+        "Initiative",
+        "AssignedTo",
+        "Priority",
+        "Due",
+        "Status",
+        "ReviewId"
+      ])
+      .LeftJoin("Brigade", "Brigade")
+      .Select("Title", "BrigadeTitle")
+      .LeftJoin("ReviewID", "Review").Select("ID", "ReviewId")
+      .Query()
+      .ToString();
+
+    let allActionPlanItemDetail: IActionPlanItem[] = [];
+
+    //Get row detail form Aciton Plan list
+    const actionPlanItemDetail = await sp.web.lists
+      .getByTitle("Action Plan Items")
+      .renderListDataAsStream({ ViewXml: query });
+    console.log(actionPlanItemDetail);
+    const row = actionPlanItemDetail.Row;
+    for (let i = 0; i < row.length; i++) {
+
+      allActionPlanItemDetail.push({
+        brigadeName: row[i].BrigadeTItle,
+        endState: row[i].Title,
+        viabilityCategory: row[i].ViabilityCategory,
+        subCategory: row[i].SubCategory,
+        rating: row[i].Rating,
+        statementSelection: row[i].Challenge,
+        treatment: row[i].Treatment,
+        initiative: row[i].Initiative,
+        supportRequired: row[i].AssignedTo,
+        priority: row[i].Priority,
+        due: row[i].Due,
+        status: row[i].Status,
+      });
+    }
+    console.log(allActionPlanItemDetail);
+    return allActionPlanItemDetail;
+  }
+
   public async _getActionPlanMaster(
     reviewPeriod: string,
     selectedBrigade: IBrigadeDataListOption[]
@@ -132,7 +196,8 @@ export class ABRService {
         "DistrictTitle",
         "RegionId",
         "RegionTitle",
-        "ReviewID"
+        "ReviewID",
+        "Classification"
       ])
       .LeftJoin("Brigade", "Brigade")
       .Select("Title", "BrigadeTitle")
@@ -145,28 +210,35 @@ export class ABRService {
       .Select("ID", "RegionId")
       .LeftJoin("Review", "Review")
       .Select("ID", "ReviewID")
+      .LeftJoin("Class", "Class", "Review")
+      .Select("Title", "Classification")
       .Query()
       .Where()
       .LookupField("Brigade")
       .Id()
-      .In(brigadesId).And().TextField("Year")
+      .In(brigadesId)
+      .And()
+      .TextField("Year")
       .EqualTo(reviewPeriod)
       .ToString();
 
-
     let actionPlanDetail: IActionPlan[] = [];
     const webDetail = await sp.web.get();
-    const abrListUrl = webDetail.Url + "/Lists/ABRReview"
-    const actionPlanReport = webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3"
+    const abrListUrl = webDetail.Url + "/Lists/ABRReview";
+    const actionPlanReport =
+      webDetail.Url + "/ActionPlans/Pages/items.aspx?PId={0}&maxrating=3";
 
     //Get row detail form Aciton Plan list
     const allActionPlan = await sp.web.lists
       .getByTitle("Action Plans")
       .renderListDataAsStream({ ViewXml: query });
     const row = allActionPlan.Row;
-    console.log(row);
+
     for (let i = 0; i < row.length; i++) {
-      let reviewURL = abrListUrl + "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" + row[i].ReviewID;
+      let reviewURL =
+        abrListUrl +
+        "/AllItems.aspx?View={BC3455D0-DFC9-41F3-B0DA-379CAD42E8B0}&FilterField1=ID&FilterValue1=" +
+        row[i].ReviewID;
       let reportURL = actionPlanReport.replace("{0}", row[i].ReviewID);
       actionPlanDetail.push({
         reviewId: row[i].ReviewID,
@@ -180,12 +252,13 @@ export class ABRService {
         regionId: row[i].RegionId,
         regionName: row[i].RegionTitle,
         actionPlanReportURL: reportURL,
-        reviewDetail: reviewURL
+        reviewDetail: reviewURL,
+        classification: row[i].Classification
       });
     }
-    console.log(actionPlanDetail);
+
     return actionPlanDetail;
   }
-
-
 }
+
+

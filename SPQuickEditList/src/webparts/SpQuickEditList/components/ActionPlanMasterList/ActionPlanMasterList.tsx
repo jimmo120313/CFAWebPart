@@ -5,7 +5,7 @@ import {
   IActionPlanMasterListState
 } from "./index";
 import ReactDataGrid from "react-data-grid";
-import { IActionPlan } from "../../../../models/index";
+import { IActionPlan, IActionPlanItem } from "../../../../models/index";
 import { ABRService } from "../../../../services/index";
 import { registerBeforeUnloadHandler } from "@microsoft/teams-js";
 
@@ -31,10 +31,12 @@ const columns = [
   { key: "regionName", name: "Region" },
   { key: "reviewDetail", name: "Review Detail", getRowMetaData: (row) => row, formatter: ABRUrlFormatter },
   { key: "actionPlanReportURL", name: "Action Plan Report", width: 150, getRowMetaData: (row) => row, formatter: ReportUrlFormatter },
-  { key: "reviewId", name: "Review ID" }
+  { key: "reviewId", name: "Review ID" },
+  { key: "classification", name: "Classification" }
 ];
 
 let actionPlanDetail: IActionPlan[]
+let actionPlanItemDetail: IActionPlanItem[]
 const actionPlanColumns = () => {
 
 }
@@ -62,6 +64,10 @@ export class ActionPlanMasterList extends React.Component<
       this.props.reviewPeriod,
       this.props.selectedBrigade
     );
+
+    await this.actionPlanService._getActionPlanItem(this.props.reviewPeriod,
+      this.props.selectedBrigade
+    );
     this.setState({ rows: actionPlanDetail })
 
 
@@ -78,13 +84,8 @@ export class ActionPlanMasterList extends React.Component<
         }
       ]
     }
+
   ];
-  // private _getCellActions: any = (column, row) => {
-  //   const cellActions = {
-  //     actionPlanReportURL: this._actionPlanReportURLActions
-  //   };
-  //   return cellActions[column.key];
-  // }
   public render(): React.ReactElement<IActionPlanMasterListProps> {
     return (
       <ReactDataGrid
@@ -92,15 +93,7 @@ export class ActionPlanMasterList extends React.Component<
         rowGetter={i => this.state.rows[i]}
         rowsCount={3}
         minHeight={150}
-        rowSelection={{
-          showCheckbox: true,
-          enableShiftSelect: true,
-          // onRowsSelected: this.onRowsSelected,
-          // onRowsDeselected: this.onRowsDeselected,
-          // selectBy: {
-          //   indexes: this.state.selectedIndexes
-          // }
-        }}
+
       />
     );
   }
