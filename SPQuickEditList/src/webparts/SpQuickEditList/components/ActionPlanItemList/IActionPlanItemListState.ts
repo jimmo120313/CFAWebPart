@@ -1,6 +1,6 @@
 import { IActionPlanItem } from "../../../../models/IActionPlanItem";
 
 export interface IActionPlanItemListState {
-  rows?: any;
+  rows?: any[];
   selectedBrigade: any[];
 }

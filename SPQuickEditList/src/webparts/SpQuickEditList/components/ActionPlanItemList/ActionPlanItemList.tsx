@@ -32,7 +32,7 @@ export class ActionPlanItemList extends React.Component<
     super(props);
     this.state = {
       selectedBrigade: this.props.selectedBrigade,
-      rows: {}
+      rows: []
     };
   }
   public async componentDidMount(): Promise<void> {
@@ -50,7 +50,7 @@ export class ActionPlanItemList extends React.Component<
         <ReactDataGrid
           columns={columns}
           rowGetter={i => this.state.rows[i]}
-          rowsCount={3}
+          rowsCount={10}
           minHeight={150}
         />
       );

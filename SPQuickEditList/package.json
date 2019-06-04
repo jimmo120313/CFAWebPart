@@ -24,6 +24,7 @@
     "@types/react-dom": "16.0.5",
     "@types/webpack-env": "1.13.1",
     "camljs": "^2.11.0",
+    "material-table": "^1.39.0",
     "office-ui-fabric-react": "^5.135.0",
     "react": "16.7.0",
     "react-data-grid": "^6.1.0",
