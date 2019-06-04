@@ -1,3 +1,6 @@
+import { IActionPlanItem } from "../../../../models/IActionPlanItem";
+
 export interface IActionPlanItemListState {
-  description?: string;
+  rows?: any;
+  selectedBrigade: any[];
 }

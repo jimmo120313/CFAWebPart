@@ -1,11 +1,14 @@
 :global {
-  .dd{
-    width:20%;
+  .dd {
+    width: 20%;
     float: left;
   }
 
-  .Canvas.Canvas{
-    max-width:initial;
-}
+  .Canvas.Canvas {
+    max-width: initial;
+  }
 
+  #workbenchPageContent {
+    max-width: 3000px !important;
+  }
 }

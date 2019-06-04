@@ -14,7 +14,7 @@ import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 export class ActionPlanPage extends React.Component<
   IActionPlanPageProps,
   IActionPlanPageState
-  > {
+> {
   private abrService = new ABRService();
 
   constructor(props: IActionPlanPageProps) {
@@ -32,7 +32,7 @@ export class ActionPlanPage extends React.Component<
   public async componentDidMount(): Promise<void> {
     //Get Rating
     let rating = this.abrService._getRating();
-    this.setState({ ratingOption: rating })
+    this.setState({ ratingOption: rating });
     //Get Viability Category
     this.abrService
       ._getViabilityCategoryOption()
@@ -56,25 +56,28 @@ export class ActionPlanPage extends React.Component<
   public render(): React.ReactElement<IActionPlanPageProps> {
     return (
       <div>
-        <div >
+        <div>
           <Dropdown
             placeHolder="Brigade (Multi Select)"
             options={this.state.brigadeOption}
+            multiSelect
             className="dd"
-          //onChanged={this._onReviewPeriodSelected}
+            //onChanged={this._onReviewPeriodSelected}
           />
 
           <Dropdown
             placeHolder="Rating (Multi Select)"
             options={this.state.ratingOption}
+            multiSelect
             className="dd"
-          //onChanged={this._onDistrictSelected}
+            //onChanged={this._onDistrictSelected}
           />
           <Dropdown
             placeHolder="Viability Category"
             options={this.state.ViabilityOption}
+            multiSelect
             className="dd"
-          //onChanged={this._onDistrictSelected}
+            //onChanged={this._onDistrictSelected}
           />
           {/* <Dropdown
           placeHolder="End State (Question Ref)"

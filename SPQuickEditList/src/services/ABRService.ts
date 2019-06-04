@@ -14,7 +14,6 @@ export class ABRService {
   private viabilityCategory: ISolutionDropdownOption[] = [];
   private ratingOpion: ISolutionDropdownOption[] = [];
 
-
   public async _getBrigadeOption(
     district: string
   ): Promise<IBrigadeDataListOption[]> {
@@ -73,7 +72,6 @@ export class ABRService {
   }
 
   public _getRating(): ISolutionDropdownOption[] {
-
     let vCategoryObj: ISolutionDropdownOption[] = [
       {
         key: "1",
@@ -87,17 +85,17 @@ export class ABRService {
         key: "3",
         text: "Green"
       }
-
-    ]
+    ];
     return vCategoryObj;
-  };
+  }
 
-
-  public async _getViabilityCategoryOption(): Promise<ISolutionDropdownOption[]> {
+  public async _getViabilityCategoryOption(): Promise<
+    ISolutionDropdownOption[]
+  > {
     const vc = await sp.web.lists
       .getByTitle("ViabilityCategory")
       .items.select("ID", "Title")
-      .get()
+      .get();
 
     vc.forEach(d => {
       let vCategoryObj: ISolutionDropdownOption = {
@@ -111,8 +109,8 @@ export class ABRService {
   }
 
   public async _getActionPlanItem(
-    reviewPeriod: string,
-    selectedBrigade: IBrigadeDataListOption[]
+    reviewPeriod?: string,
+    selectedBrigade?: IBrigadeDataListOption[]
   ): Promise<IActionPlanItem[]> {
     let brigadesId = new Array();
 
@@ -140,7 +138,8 @@ export class ABRService {
       ])
       .LeftJoin("Brigade", "Brigade")
       .Select("Title", "BrigadeTitle")
-      .LeftJoin("ReviewID", "Review").Select("ID", "ReviewId")
+      .LeftJoin("ReviewID", "Review")
+      .Select("ID", "ReviewId")
       .Query()
       .ToString();
 
@@ -153,7 +152,6 @@ export class ABRService {
     console.log(actionPlanItemDetail);
     const row = actionPlanItemDetail.Row;
     for (let i = 0; i < row.length; i++) {
-
       allActionPlanItemDetail.push({
         brigadeName: row[i].BrigadeTItle,
         endState: row[i].Title,
@@ -166,7 +164,7 @@ export class ABRService {
         supportRequired: row[i].AssignedTo,
         priority: row[i].Priority,
         due: row[i].Due,
-        status: row[i].Status,
+        status: row[i].Status
       });
     }
     console.log(allActionPlanItemDetail);
@@ -260,5 +258,3 @@ export class ABRService {
     return actionPlanDetail;
   }
 }
-
-
